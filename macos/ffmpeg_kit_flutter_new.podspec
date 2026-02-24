@@ -38,6 +38,9 @@ Pod::Spec.new do |s|
                                  'Frameworks/libavutil.framework',
                                  'Frameworks/libswresample.framework',
                                  'Frameworks/libswscale.framework'
+    ss.osx.vendored_libraries = 'Frameworks/libsrt.1.5.dylib',
+                                'Frameworks/libssl.3.dylib',
+                                'Frameworks/libcrypto.3.dylib'
     ss.osx.frameworks = 'AudioToolbox', 'CoreMedia'
     ss.libraries = 'z', 'bz2', 'c++', 'iconv'
     ss.osx.deployment_target = '10.15'
