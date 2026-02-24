@@ -1,11 +1,19 @@
 #!/bin/bash
 
-# Download and unzip MacOS framework
+# Download and unzip MacOS framework, or use local override.
 MACOS_URL="https://github.com/sk3llo/ffmpeg_kit_flutter/releases/download/8.0.0-full-gpl/ffmpeg-kit-macos-full-gpl-8.0.0.zip"
+LOCAL_FRAMEWORKS_DIR="${FFMPEG_KIT_MACOS_FRAMEWORKS:-}"
+
 mkdir -p Frameworks
-curl -L $MACOS_URL -o frameworks.zip
-unzip -o frameworks.zip -d Frameworks
-rm frameworks.zip
+
+if [[ -n "$LOCAL_FRAMEWORKS_DIR" ]] && [[ -d "$LOCAL_FRAMEWORKS_DIR" ]]; then
+	echo "Using local ffmpeg-kit frameworks: $LOCAL_FRAMEWORKS_DIR"
+	rsync -a "$LOCAL_FRAMEWORKS_DIR"/ Frameworks/
+else
+	curl -L "$MACOS_URL" -o frameworks.zip
+	unzip -o frameworks.zip -d Frameworks
+	rm frameworks.zip
+fi
 
 # Delete bitcode from all frameworks
 xcrun bitcode_strip -r Frameworks/ffmpegkit.framework/ffmpegkit -o Frameworks/ffmpegkit.framework/ffmpegkit
